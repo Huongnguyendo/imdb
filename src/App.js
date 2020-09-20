@@ -5,33 +5,50 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "react-input-range/lib/css/index.css";
 import InputRange from "react-input-range";
+import { css } from "@emotion/core";
+import ClipLoader from "react-spinners/ClipLoader";
 import MovieList from "./components";
 import { Navbar, Nav, NavDropdown, Form, FormControl } from "react-bootstrap";
+import Carousel from "react-bootstrap/Carousel";
 import Navigation from "./components/navigation";
+import MovieCarousel from './components/carousel';
 import Pagination from "react-js-pagination";
-import FilterBoard from "./components/filterBoard";
+import Modal from "react-modal";
 
 const apikey = process.env.REACT_APP_APIKEY;
+
+// for spinner
+const override = css`
+  display: block;
+  margin: 25% auto;
+  border-color: red;
+`;
 
 function App() {
   let [movieList, setMovieList] = useState([]);
   let [page, setPage] = useState(1);
   let [genres, setGenres] = useState(null);
   let [totalResult, setTotalResult] = useState(0);
-  let [year, setYear] = useState({ min: 1980, max: 2020 });
   let [rate, setRate] = useState({ min: 0, max: 10 });
+  let [searchGenre, setSearchGenre] = useState(null);
+  let [originalList, setOriginalList] = useState(null);
+  let [moviePosters, setMoviePosters] = useState(null);
 
   // get now playing movies
-  const getMovieLatest = async () => {
-    let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=1`;
+  const getMovieLatest = async (page) => {
+    let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=${page}`;
     let response = await fetch(url);
     let data = await response.json();
+    // get total result for pagination
     setTotalResult(data.total_results);
+    // get original list for sort funcs
+    setOriginalList(data.results);
     console.log("total result: ", data.total_results);
-    // we only need to know the results array of data
+    // only need to know the results array of data
     setMovieList(data.results);
   };
 
+  // get list of genres
   const getGenres = async () => {
     let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apikey}&language=en-US`;
     let result = await fetch(url);
@@ -41,17 +58,14 @@ function App() {
     // getMovieLatest();
   };
 
+  // get genres on cards
   useEffect(() => {
     getGenres();
   }, []);
 
-  let handlePageChange = async (pageNumber) => {
-    setPage(pageNumber);
-    let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=${pageNumber}`;
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log("data", data);
-    setMovieList(data.results);
+  let handlePageChange = async (page) => {
+    setPage(page);
+    getMovieLatest(page);
   };
 
   const searchByKeyword = async (keyword) => {
@@ -59,26 +73,16 @@ function App() {
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${apikey}&query=${keyword}`;
     let response = await fetch(url);
     let data = await response.json();
-    console.log("data", data);
     setMovieList(data.results);
-  };
-
-  const filterByYear = (value) => {
-    setYear(value);
-    let filteredList = movieList.filter((movie) => {
-      let year = parseInt(movie.release_date.split("-")[0]);
-      return year > value.min && year < value.max;
-    });
-
-    setMovieList(filteredList);
+    setOriginalList(data.results);
+    setTotalResult(data.total_results);
   };
 
   let filterByRating = (rate) => {
     console.log("rating value:", rate);
     console.log("movieList:", movieList);
     setRate(rate);
-    // console.log('value.min & max', ratingValue.value.min, ratingValue.value.max)
-    let filteredMovies = movieList.filter((movie) => {
+    let filteredMovies = originalList.filter((movie) => {
       return movie.vote_average >= rate.min && movie.vote_average <= rate.max;
     });
     console.log("filtered Movies:", filteredMovies);
@@ -89,26 +93,25 @@ function App() {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apikey}&language=en-US&page=1`;
     let response = await fetch(url);
     let data = await response.json();
-    console.log("data", data);
     setMovieList(data.results);
   };
 
   const sortByRate = (direction) => {
     let sortedList;
-    if (direction === "asc") {
-      sortedList = movieList.sort((a, b) => a.vote_average - b.vote_average);
-    } else {
+    if (direction === "desc") {
       sortedList = movieList.sort((a, b) => b.vote_average - a.vote_average);
+    } else {
+      sortedList = movieList.sort((a, b) => a.vote_average - b.vote_average);
     }
     setMovieList([...sortedList]);
   };
 
   const sortByPopular = (direction) => {
     let sortedList;
-    if (direction === "asc") {
-      sortedList = movieList.sort((a, b) => a.popularity - b.popularity);
-    } else {
+    if (direction === "desc") {
       sortedList = movieList.sort((a, b) => b.popularity - a.popularity);
+    } else {
+      sortedList = movieList.sort((a, b) => a.popularity - b.popularity);
     }
     setMovieList([...sortedList]);
   };
@@ -117,21 +120,48 @@ function App() {
     getMovieLatest();
   }, []);
 
+  const getMoviesByGenre = async (genre) => {
+    setSearchGenre(genre);
+    let url = `https://api.themoviedb.org/3/discover/movie?api_key=${apikey}&language=en-US&sort_by=popularity.desc&page=1&with_genres=${genre}`;
+    let response = await fetch(url);
+    let data = await response.json();
+    // setMovieList(result);
+    console.log("total results genre", data.total_results);
+    setOriginalList(data.results);
+    setTotalResult(data.total_results);
+    setMovieList(data.results);
+  };
+
+  if (!movieList) {
+    return (
+      <div className="sweet-loading">
+        <ClipLoader
+          css={override}
+          size={150}
+          color={"#purple"}
+          loading={this.state.loading}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="App">
       <Navigation
+        getMovieLatest={getMovieLatest}
         searchByTopRated={searchByTopRated}
         searchByKeyword={searchByKeyword}
-      />
-
-      <FilterBoard
+        getMoviesByGenre={getMoviesByGenre}
         sortByRate={sortByRate}
         sortByPopular={sortByPopular}
-        filterByYear={filterByYear}
         filterByRating={filterByRating}
-        year={year}
         rate={rate}
       />
+
+      {/* <MovieCarousel /> */}
+
+      <Modal isOpen={false} />
+
       <MovieList list={movieList} genres={genres} />
       <Pagination
         prevPageText="prev"
