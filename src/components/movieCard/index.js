@@ -11,8 +11,8 @@ const MovieCard = ({ movie, genres }) => {
           src={`https://image.tmdb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}
         />
         <Card.Body>
-          <Card.Title>Title: {movie.title}</Card.Title>
-          <Card.Text>Overview: {movie.overview}</Card.Text>
+          <Card.Title>{movie.title}</Card.Title>
+          <Card.Text>{movie.overview}</Card.Text>
           <Card.Text>Popularity: {movie.popularity}</Card.Text>
           <Card.Text>Rating: {movie.vote_average}</Card.Text>
           <Card.Text>Release date: {movie.release_date}</Card.Text>

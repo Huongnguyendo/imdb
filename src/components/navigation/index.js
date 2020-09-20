@@ -10,7 +10,7 @@ const Navigation = ({searchByKeyword, searchByTopRated}) => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#home">Now Playing</Nav.Link>
             <Nav.Link href="#features" onClick={() => searchByTopRated()}>Top rated</Nav.Link>
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

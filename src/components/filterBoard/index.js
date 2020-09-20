@@ -60,7 +60,7 @@ export default function FilterBoard({
             maxValue={2020}
             minValue={1980}
             value={year}
-            onChange={(value) => filterByYear(value)}
+            onChange={(value) => {console.log(value); filterByYear(value)}}
           />
         </div>
         <div style={{ color: "white", width: "40%"}}>
@@ -69,7 +69,7 @@ export default function FilterBoard({
             maxValue={10}
             minValue={0}
             value={rate}
-            onChange={(value) => filterByRating(value)}
+            onChange={(value) => {console.log(value); filterByRating(value)}}
           />
         </div>
       </div>
