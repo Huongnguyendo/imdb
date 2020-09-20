@@ -5,16 +5,6 @@ import { Carousel } from "react-bootstrap";
 function MovieCarousel() {
   let [movieListSlider, setMovieListSlider] = useState([]);
 
-//   let fetchMovies = async () => {
-//     const apikey = process.env.REACT_APP_APIKEY;
-//     let url = `https://api.themoviedb.org/3/trending/all/day?api_key=${apikey}`;
-//     let response = await fetch(url);
-//     let data = await response.json();
-
-//     console.log(data);
-//     setMovieListSlider(data);
-//   };
-
   const getTrending = async () => {
     const apikey = process.env.REACT_APP_APIKEY;
     let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=1`;
