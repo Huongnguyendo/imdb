@@ -32,7 +32,6 @@ function App() {
   let [rate, setRate] = useState({ min: 0, max: 10 });
   let [searchGenre, setSearchGenre] = useState(null);
   let [originalList, setOriginalList] = useState(null);
-  let [moviePosters, setMoviePosters] = useState(null);
 
   // get now playing movies
   const getMovieLatest = async (page) => {

@@ -33,39 +33,7 @@ const Navigation = ({
             </Nav.Link>
 
             
-            {/* <Dropdown>
-              <Dropdown.Toggle id="dropdown-basic">
-                Sort By
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  href="#/action-1"
-                  onClick={() => sortByRate("desc")}
-                >
-                  Rating (high to low)
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#/action-2"
-                  onClick={() => sortByRate("asc")}
-                >
-                  Rating (low to high)
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#/action-3"
-                  onClick={() => sortByPopular("desc")}
-                >
-                  Popularity (high to low)
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#/action-4"
-                  onClick={() => sortByPopular("asc")}
-                >
-                  popularity(low to high)
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown> */}
-
+            
             <NavDropdown
               className="d-flex flex-row-reverse"
               title="Sort By"
