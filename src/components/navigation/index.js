@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import InputRange from "react-input-range";
 
+
 const Navigation = ({
   getMovieLatest,
   searchByKeyword,
@@ -17,7 +18,7 @@ const Navigation = ({
   getMoviesByGenre,
   sortByRate,
   sortByPopular,
-  filterByRating,
+  filterByRate,
   rate,
 }) => {
   let keyword = "";
@@ -59,7 +60,8 @@ const Navigation = ({
                   maxValue={10}
                   minValue={0}
                   value={rate}
-                  onChange={(value) => {console.log(value); filterByRating(value)}}
+                  // filter movies on change
+                  onChange={(value) => filterByRate(value)}
                 />
               </div>
               </NavDropdown.Item>

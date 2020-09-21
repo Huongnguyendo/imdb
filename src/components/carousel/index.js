@@ -3,19 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Carousel } from "react-bootstrap";
 
 function MovieCarousel({ list }) {
-  // let [movieListSlider, setMovieListSlider] = useState([]);
-
-  // const getTrending = async () => {
-  //   const apikey = process.env.REACT_APP_APIKEY;
-  //   let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=1`;
-  //   let response = await fetch(url);
-  //   let data = await response.json();
-  //   console.log("trending data results: ", data.results);
-  //   movieListSlider(data.results);
-  // };
-
-  // useEffect(getTrending, []);
-  // console.log("list[0]", list[0]);
+  
 
   if (!(list.length > 0)) {
     return <div>Loading</div>;

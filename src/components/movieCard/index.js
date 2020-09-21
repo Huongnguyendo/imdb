@@ -3,7 +3,11 @@ import { Card, Button, Badge } from "react-bootstrap";
 import Modal from "react-modal";
 
 const MovieCard = ({ movie, genres }) => {
-  console.log(movie);
+  if(!genres || genres.length < 1) {
+    return (
+      <div>Loading...</div>
+    )
+  }
   return (
     <div>
       <Card className="card" style={{ width: "18rem", height: "400px" }}>
@@ -12,20 +16,6 @@ const MovieCard = ({ movie, genres }) => {
           src={`https://image.tmdb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}
         />
         <Card.Body>
-          {/* <Card.Title>{movie.title}</Card.Title>
-          <Card.Text>{movie.overview}</Card.Text>
-          <Card.Text>Popularity: {movie.popularity}</Card.Text>
-          <Card.Text>Rating: {movie.vote_average}</Card.Text>
-          <Card.Text>Release date: {movie.release_date}</Card.Text>
-          <div>
-            {movie.genre_ids.map((genre) => {
-              return (
-                <Badge variant="danger" style={{ marginRight: "10px" }}>
-                  {genres.find((item) => item.id == genre).name}
-                </Badge>
-              );
-            })}
-          </div> */}
 
           <Card.ImgOverlay>
             <div className="card-content">
@@ -37,10 +27,10 @@ const MovieCard = ({ movie, genres }) => {
                 </h1>
               </Card.Title>
               <Card.Text className="mb-2">
-                {movie.genre_ids.map((genre) => {
+                {movie.genre_ids.map((id) => {
                   return (
-                    <Badge variant="danger" style={{ marginRight: "10px" }}>
-                      {genres.find((item) => item.id == genre).name}
+                    <Badge variant="warning" style={{marginLeft: "5px"}}>
+                      {genres.find((item) => item.id == id).name}
                     </Badge>
                   );
                 })}

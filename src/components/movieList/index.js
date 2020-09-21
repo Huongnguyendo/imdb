@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MovieCard from "./movieCard";
+import MovieCard from "../movieCard";
 import { Row, Col } from "react-bootstrap";
 
 const MovieList = (props) => {

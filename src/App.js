@@ -7,13 +7,13 @@ import "react-input-range/lib/css/index.css";
 import InputRange from "react-input-range";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
-import MovieList from "./components";
+import MovieList from "./components/movieList";
 import { Navbar, Nav, NavDropdown, Form, FormControl } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import Navigation from "./components/navigation";
 import MovieCarousel from "./components/carousel";
 import Pagination from "react-js-pagination";
-import Modal from "react-modal";
+import ReactModal from 'react-modal';
 
 const apikey = process.env.REACT_APP_APIKEY;
 
@@ -33,14 +33,14 @@ function App() {
   let [genres, setGenres] = useState(null);
   let [rate, setRate] = useState({ min: 0, max: 10 });
   let [searchGenre, setSearchGenre] = useState(null);
-  let [originalList, setOriginalList] = useState(null);
+  let [originalList, setOriginalList] = useState(null); //call everytime api is called
 
   // get now playing movies
   const getMovieLatest = async (page) => {
     let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=${page}`;
     let response = await fetch(url);
     let data = await response.json();
-    // get total result for pagination, call everytime api is called 
+    // get total result for pagination, call everytime api is called
     setTotalResult(data.total_results);
     // get original list for sort funcs
     setOriginalList(data.results);
@@ -54,25 +54,27 @@ function App() {
     let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apikey}&language=en-US`;
     let result = await fetch(url);
     let data = await result.json();
-    //for pagination 
-    setTotalResult(data.total_results);
     setGenres(data.genres);
-    // getMovieLatest();
   };
 
-  // get genres on cards
+  // get genres on cards first time page loaded
   useEffect(() => {
     getGenres();
   }, []);
-
+  // then render
+  useEffect(() => {
+    getMovieLatest();
+  }, []);
+  
+  
   let handleActivePage = async (page) => {
     setPage(page);
     getMovieLatest(page);
   };
 
   const searchByKeyword = async (keyword) => {
-    // if theres no keyword
-    if (keyword == "" || keyword == null) {
+    // if theres no keyword when button clicked
+    if (keyword === "" || keyword === null) {
       return;
     }
 
@@ -80,19 +82,17 @@ function App() {
     let response = await fetch(url);
     let data = await response.json();
     setTotalResult(data.total_results);
-    setMovieList(data.results);
     setOriginalList(data.results);
-    
+    setMovieList(data.results);
   };
 
-  let filterByRating = (rate) => {
+  let filterByRate = (rate) => {
     console.log("rating value:", rate);
-    console.log("movieList:", movieList);
     setRate(rate);
     let filteredMovies = originalList.filter((movie) => {
+      // rate is an object with min and max
       return movie.vote_average >= rate.min && movie.vote_average <= rate.max;
     });
-    console.log("filtered Movies:", filteredMovies);
     setMovieList(filteredMovies);
   };
 
@@ -101,6 +101,7 @@ function App() {
     let response = await fetch(url);
     let data = await response.json();
     setTotalResult(data.total_results);
+    setOriginalList(data.results);
     setMovieList(data.results);
   };
 
@@ -124,9 +125,7 @@ function App() {
     setMovieList([...sortedList]);
   };
 
-  useEffect(() => {
-    getMovieLatest();
-  }, []);
+  
 
   const getMoviesByGenre = async (genre) => {
     setSearchGenre(genre);
@@ -152,6 +151,7 @@ function App() {
       </div>
     );
   }
+  
 
   return (
     <div className="App">
@@ -162,13 +162,13 @@ function App() {
         getMoviesByGenre={getMoviesByGenre}
         sortByRate={sortByRate}
         sortByPopular={sortByPopular}
-        filterByRating={filterByRating}
+        filterByRate={filterByRate}
         rate={rate}
       />
 
       <MovieCarousel list={movieList} />
 
-      <Modal isOpen={false} />
+      
 
       <MovieList list={movieList} genres={genres} />
       <Pagination
