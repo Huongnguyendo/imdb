@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import logo from './logo.svg';
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -25,15 +24,20 @@ const override = css`
 `;
 
 function App() {
+  // for rendering, movieList mvp, only ca about setMovieList
   let [movieList, setMovieList] = useState([]);
   // for pagination
   let [page, setPage] = useState(1);
   // movieList only has 20 items --> need total result for pagination
   let [totalResult, setTotalResult] = useState(0);
+  // to get array of all genres 
   let [genres, setGenres] = useState(null);
+  // rate is not a single value but an object with min and max values
   let [rate, setRate] = useState({ min: 0, max: 10 });
+  // to search by specific genre
   let [searchGenre, setSearchGenre] = useState(null);
-  let [originalList, setOriginalList] = useState(null); //call everytime api is called
+  // call everytime api is called, for sort funcs
+  let [originalList, setOriginalList] = useState(null); 
 
   // get now playing movies
   const getMovieLatest = async (page) => {
@@ -68,7 +72,9 @@ function App() {
   
   
   let handleActivePage = async (page) => {
+    // set active page using setPage
     setPage(page);
+    // pass pageNum to getMovieLatest func
     getMovieLatest(page);
   };
 
@@ -93,7 +99,7 @@ function App() {
       // rate is an object with min and max
       return movie.vote_average >= rate.min && movie.vote_average <= rate.max;
     });
-    setMovieList(filteredMovies);
+    setMovieList(filteredMovies); // no spread bc filter makes a different array
   };
 
   const searchByTopRated = async () => {
@@ -126,13 +132,14 @@ function App() {
   };
 
   
-
+  // param genre is passed from navigation component
   const getMoviesByGenre = async (genre) => {
+    // set genre to the chosen genre
     setSearchGenre(genre);
+    // fetch api accordingly
     let url = `https://api.themoviedb.org/3/discover/movie?api_key=${apikey}&language=en-US&sort_by=popularity.desc&page=1&with_genres=${genre}`;
     let response = await fetch(url);
     let data = await response.json();
-    // setMovieList(result);
     console.log("total results genre", data.total_results);
     setTotalResult(data.total_results);
     setOriginalList(data.results);
@@ -167,8 +174,6 @@ function App() {
       />
 
       <MovieCarousel list={movieList} />
-
-      
 
       <MovieList list={movieList} genres={genres} />
       <Pagination

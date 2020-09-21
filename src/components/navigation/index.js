@@ -25,15 +25,13 @@ const Navigation = ({
   return (
     <div>
       <Navbar expand="lg" className="navbar-movie" variant="dark">
-        <Navbar.Brand href="#home" onClick={() => getMovieLatest()} >MovieBox</Navbar.Brand>
+        <Navbar.Brand style={{color: "#f4c50b", fontWeight: 600, fontSize: "30px", letterSpacing: "1px"}} href="#home" onClick={() => getMovieLatest()} >MovieBox</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="#features" onClick={() => searchByTopRated()}>
               Top rated
             </Nav.Link>
-
-            
             
             <NavDropdown
               className="d-flex flex-row-reverse"
@@ -61,7 +59,7 @@ const Navigation = ({
                   minValue={0}
                   value={rate}
                   // filter movies on change
-                  onChange={(value) => filterByRate(value)}
+                  onChange={(rate) => filterByRate(rate)}
                 />
               </div>
               </NavDropdown.Item>
@@ -76,6 +74,7 @@ const Navigation = ({
                 All
               </NavDropdown.Item>
               <NavDropdown.Divider />
+              {/* receive function getMoviesByGenre as props and pass genre id to it */}
               <NavDropdown.Item onClick={() => getMoviesByGenre("28")}>
                 Action
               </NavDropdown.Item>

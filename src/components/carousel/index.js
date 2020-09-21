@@ -19,8 +19,8 @@ function MovieCarousel({ list }) {
             alt="First slide"
           />
           <Carousel.Caption>
-            <h1>{list[0].title}</h1>
-            <h5>{list[0].overview}</h5>
+            <h1 className="carousel-title">{list[0].title}</h1>
+            <h5 className="carousel-overview">{list[0].overview}</h5>
           </Carousel.Caption>
         </Carousel.Item>
 
@@ -31,8 +31,8 @@ function MovieCarousel({ list }) {
             alt="Second slide"
           />
           <Carousel.Caption>
-            <h1>{list[1].title}</h1>
-            <h5>{list[1].overview}</h5>
+            <h1 className="carousel-title">{list[1].title}</h1>
+            <h5 className="carousel-overview">{list[1].overview}</h5>
           </Carousel.Caption>
         </Carousel.Item>
 
@@ -43,8 +43,8 @@ function MovieCarousel({ list }) {
             alt="Third slide"
           />
           <Carousel.Caption>
-            <h1>{list[2].title}</h1>
-            <h5>{list[2].overview}</h5>
+            <h1 className="carousel-title">{list[2].title}</h1>
+            <h5 className="carousel-overview">{list[2].overview}</h5>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>

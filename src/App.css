@@ -54,3 +54,11 @@
   padding: 0 !important;
 }
 
+/* CAROUSEL */
+.carousel-title {
+  color: orange;
+  letter-spacing: 1.5px;
+  font-size: 50px;
+  font-weight: 600;
+}
+
