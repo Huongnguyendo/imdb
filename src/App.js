@@ -26,9 +26,11 @@ const override = css`
 
 function App() {
   let [movieList, setMovieList] = useState([]);
+  // for pagination
   let [page, setPage] = useState(1);
-  let [genres, setGenres] = useState(null);
+  // movieList only has 20 items --> need total result for pagination
   let [totalResult, setTotalResult] = useState(0);
+  let [genres, setGenres] = useState(null);
   let [rate, setRate] = useState({ min: 0, max: 10 });
   let [searchGenre, setSearchGenre] = useState(null);
   let [originalList, setOriginalList] = useState(null);
@@ -38,11 +40,11 @@ function App() {
     let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=${page}`;
     let response = await fetch(url);
     let data = await response.json();
-    // get total result for pagination
+    // get total result for pagination, call everytime api is called 
     setTotalResult(data.total_results);
     // get original list for sort funcs
     setOriginalList(data.results);
-    console.log("total result: ", data.total_results);
+    console.log("total result: ", data.total_results.length);
     // only need to know the results array of data
     setMovieList(data.results);
   };
@@ -52,7 +54,8 @@ function App() {
     let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apikey}&language=en-US`;
     let result = await fetch(url);
     let data = await result.json();
-
+    //for pagination 
+    setTotalResult(data.total_results);
     setGenres(data.genres);
     // getMovieLatest();
   };
@@ -62,19 +65,24 @@ function App() {
     getGenres();
   }, []);
 
-  let handlePageChange = async (page) => {
+  let handleActivePage = async (page) => {
     setPage(page);
     getMovieLatest(page);
   };
 
   const searchByKeyword = async (keyword) => {
-    console.log("searchbykeyword");
+    // if theres no keyword
+    if (keyword == "" || keyword == null) {
+      return;
+    }
+
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${apikey}&query=${keyword}`;
     let response = await fetch(url);
     let data = await response.json();
+    setTotalResult(data.total_results);
     setMovieList(data.results);
     setOriginalList(data.results);
-    setTotalResult(data.total_results);
+    
   };
 
   let filterByRating = (rate) => {
@@ -92,6 +100,7 @@ function App() {
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apikey}&language=en-US&page=1`;
     let response = await fetch(url);
     let data = await response.json();
+    setTotalResult(data.total_results);
     setMovieList(data.results);
   };
 
@@ -126,8 +135,8 @@ function App() {
     let data = await response.json();
     // setMovieList(result);
     console.log("total results genre", data.total_results);
-    setOriginalList(data.results);
     setTotalResult(data.total_results);
+    setOriginalList(data.results);
     setMovieList(data.results);
   };
 
@@ -171,7 +180,8 @@ function App() {
         itemsCountPerPage={20}
         totalItemsCount={totalResult}
         pageRangeDisplayed={5}
-        onChange={(page) => handlePageChange(page)}
+        onChange={(page) => handleActivePage(page)}
+        // for style
         itemClass="page-item"
         linkClass="page-link"
       />
