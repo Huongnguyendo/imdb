@@ -11,7 +11,7 @@ import MovieList from "./components";
 import { Navbar, Nav, NavDropdown, Form, FormControl } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import Navigation from "./components/navigation";
-import MovieCarousel from './components/carousel';
+import MovieCarousel from "./components/carousel";
 import Pagination from "react-js-pagination";
 import Modal from "react-modal";
 
@@ -158,7 +158,7 @@ function App() {
         rate={rate}
       />
 
-      {/* <MovieCarousel /> */}
+      <MovieCarousel list={movieList} />
 
       <Modal isOpen={false} />
 

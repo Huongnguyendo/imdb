@@ -63,7 +63,6 @@
 
 .card-content {
   opacity: 0;
-  
 }
 
 .card:hover {
@@ -92,4 +91,3 @@
   padding: 0 !important;
 }
 
-/* input range */
