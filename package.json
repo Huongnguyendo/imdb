@@ -16,7 +16,8 @@
     "react-modal": "^3.11.2",
     "react-paginate": "^6.5.0",
     "react-scripts": "3.4.3",
-    "react-spinners": "^0.9.0"
+    "react-spinners": "^0.9.0",
+    "react-youtube": "^7.12.0"
   },
   "scripts": {
     "start": "react-scripts start",

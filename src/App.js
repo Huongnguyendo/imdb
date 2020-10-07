@@ -4,16 +4,14 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import "react-input-range/lib/css/index.css";
-import InputRange from "react-input-range";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/ClipLoader";
 import MovieList from "./components/movieList";
-import { Navbar, Nav, NavDropdown, Form, FormControl } from "react-bootstrap";
-import Carousel from "react-bootstrap/Carousel";
 import Navigation from "./components/navigation";
 import MovieCarousel from "./components/carousel";
 import Pagination from "react-js-pagination";
-import ReactModal from 'react-modal';
+import YouTube from "react-youtube";
+import ReactModal from "react-modal";
 
 const apikey = process.env.REACT_APP_APIKEY;
 
@@ -34,7 +32,8 @@ function App() {
   let [rate, setRate] = useState({ min: 0, max: 10 });
   let [searchGenre, setSearchGenre] = useState(null);
   let [originalList, setOriginalList] = useState(null); //call everytime api is called
-
+  let [modal, setModal] = useState(false);
+  let [trailer, setTrailer] = useState(null);
   // get now playing movies
   const getMovieLatest = async (page) => {
     let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=${page}`;
@@ -65,8 +64,7 @@ function App() {
   useEffect(() => {
     getMovieLatest();
   }, []);
-  
-  
+
   let handleActivePage = async (page) => {
     setPage(page);
     getMovieLatest(page);
@@ -125,8 +123,6 @@ function App() {
     setMovieList([...sortedList]);
   };
 
-  
-
   const getMoviesByGenre = async (genre) => {
     setSearchGenre(genre);
     let url = `https://api.themoviedb.org/3/discover/movie?api_key=${apikey}&language=en-US&sort_by=popularity.desc&page=1&with_genres=${genre}`;
@@ -137,6 +133,15 @@ function App() {
     setTotalResult(data.total_results);
     setOriginalList(data.results);
     setMovieList(data.results);
+  };
+
+  let getTrailer = async (movieId) => {
+    let url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apikey}&language=en-US`;
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log("hoho", data);
+    setTrailer(data.results[0].key);
+    setModal(true);
   };
 
   if (!movieList) {
@@ -151,7 +156,6 @@ function App() {
       </div>
     );
   }
-  
 
   return (
     <div className="App">
@@ -168,9 +172,14 @@ function App() {
 
       <MovieCarousel list={movieList} />
 
-      
-
-      <MovieList list={movieList} genres={genres} />
+      <ReactModal
+        portalClassName="modal"
+        isOpen={modal}
+        onRequestClose={() => setModal(false)}
+      >
+        <YouTube className="video" video={trailer} autoplay />
+      </ReactModal>
+      <MovieList list={movieList} genres={genres} getTrailer={getTrailer} />
       <Pagination
         prevPageText="prev"
         nextPageText="next"
