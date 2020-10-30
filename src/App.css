@@ -48,6 +48,7 @@
 /* lk */
 .cardd {
   overflow: hidden;
+  background-color: black !important;
 }
 
 .pagination li {
