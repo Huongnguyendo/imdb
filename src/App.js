@@ -12,7 +12,8 @@ import Carousel from "react-bootstrap/Carousel";
 import Navigation from "./components/navigation";
 import MovieCarousel from "./components/carousel";
 import Pagination from "react-js-pagination";
-import ReactModal from 'react-modal';
+import YouTube from "react-youtube";
+import ReactModal from "react-modal";
 
 const apikey = process.env.REACT_APP_APIKEY;
 
@@ -30,17 +31,25 @@ function App() {
   let [page, setPage] = useState(1);
   // movieList only has 20 items --> need total result for pagination
   let [totalResult, setTotalResult] = useState(0);
-  // to get array of all genres 
+  // to get array of all genres
   let [genres, setGenres] = useState(null);
   // rate is not a single value but an object with min and max values
   let [rate, setRate] = useState({ min: 0, max: 10 });
   // to search by specific genre
   let [searchGenre, setSearchGenre] = useState(null);
   // call everytime api is called, for sort funcs
-  let [originalList, setOriginalList] = useState(null); 
+  let [originalList, setOriginalList] = useState(null);
+  // set open-close state of modal and trailer
+  let [modal, setModal] = useState(false);
+  let [trailer, setTrailer] = useState(null);
+
+  let [keyword, setSearchKeyword] = useState(null);
+  // search option
+  let [searchOption, setSearchOption] = useState("");
 
   // get now playing movies
   const getMovieLatest = async (page) => {
+    setSearchOption("nowplaying");
     let url = `https://api.themoviedb.org/3/movie/now_playing?api_key=${apikey}&language=en-US&page=${page}`;
     let response = await fetch(url);
     let data = await response.json();
@@ -55,7 +64,7 @@ function App() {
 
   // get list of genres
   const getGenres = async () => {
-    let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apikey}&language=en-US`;
+    let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apikey}&language=en-US&page=${page}`;
     let result = await fetch(url);
     let data = await result.json();
     setGenres(data.genres);
@@ -69,13 +78,32 @@ function App() {
   useEffect(() => {
     getMovieLatest();
   }, []);
-  
-  
+
   let handleActivePage = async (page) => {
     // set active page using setPage
     setPage(page);
-    // pass pageNum to getMovieLatest func
-    getMovieLatest(page);
+    let url;
+    if (searchOption == "keyword") {
+      url = `https://api.themoviedb.org/3/search/movie?api_key=${apikey}&query=${keyword}&page=${page}`;
+    } else if (searchOption == "toprated") {
+      url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apikey}&language=en-US&page=${page}`;
+    } else if (searchOption == "genre") {
+      url = `https://api.themoviedb.org/3/discover/movie?api_key=${apikey}&language=en-US&sort_by=popularity.desc&page=1&with_genres=${searchGenre}&page=${page}`;
+    } else {
+      // pass pageNum to getMovieLatest func
+      getMovieLatest(page);
+    }
+
+    console.log("key current is:", keyword, searchGenre);
+    let response = await fetch(url);
+    let data = await response.json();
+
+    setTotalResult(data.total_results);
+    // get original list for sort funcs
+    setOriginalList(data.results);
+    console.log("total result: ", data.total_results.length);
+    // only need to know the results array of data
+    setMovieList(data.results);
   };
 
   const searchByKeyword = async (keyword) => {
@@ -83,6 +111,9 @@ function App() {
     if (keyword === "" || keyword === null) {
       return;
     }
+
+    setSearchOption("keyword");
+    setSearchKeyword(keyword);
 
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${apikey}&query=${keyword}`;
     let response = await fetch(url);
@@ -103,6 +134,7 @@ function App() {
   };
 
   const searchByTopRated = async () => {
+    setSearchOption("toprated");
     let url = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apikey}&language=en-US&page=1`;
     let response = await fetch(url);
     let data = await response.json();
@@ -131,9 +163,18 @@ function App() {
     setMovieList([...sortedList]);
   };
 
-  
+  let openModal = async (movieId) => {
+    let url = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apikey}&language=en-US`;
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log("hoho", data);
+    setTrailer(data.results[0].key);
+    setModal(true);
+  };
+
   // param genre is passed from navigation component
   const getMoviesByGenre = async (genre) => {
+    setSearchOption("genre");
     // set genre to the chosen genre
     setSearchGenre(genre);
     // fetch api accordingly
@@ -158,7 +199,10 @@ function App() {
       </div>
     );
   }
-  
+
+  let opts = {
+    width: "100%",
+  };
 
   return (
     <div className="App">
@@ -175,7 +219,6 @@ function App() {
 
       <MovieCarousel list={movieList} />
 
-      <MovieList list={movieList} genres={genres} />
       <Pagination
         prevPageText="prev"
         nextPageText="next"
@@ -190,6 +233,35 @@ function App() {
         itemClass="page-item"
         linkClass="page-link"
       />
+
+      <ReactModal
+        portalClassName="youtube-modal"
+        isOpen={modal}
+        onRequestClose={() => setModal(false)}
+        style={
+          ({
+            overlay: {},
+            content: {
+              top: "50%",
+              left: "50%",
+              right: "auto",
+              bottom: "auto",
+              marginRight: "-50%",
+              transform: "translate(-50%, -50%)",
+            },
+          },
+          { position: "relative" })
+        }
+      >
+        <YouTube
+          className="youtube-video"
+          opts={opts}
+          videoId={trailer}
+          autoplay
+        />
+      </ReactModal>
+
+      <MovieList list={movieList} genres={genres} openModal={openModal} />
     </div>
   );
 }

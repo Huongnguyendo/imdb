@@ -1,5 +1,3 @@
-
-
 .App {
   background-color: black;
   width: 100%;
@@ -19,17 +17,15 @@
   justify-content: space-around;
 }
 
-/* .card {
-  background-color: black;
-  color: white;
-} */
 
 .card-content {
   opacity: 0;
+  background-color: black;
+  color: white;
 }
 
 .card:hover {
-  overflow: scroll;
+  overflow-y: scroll !important;
 }
 
 .card:hover .card-image {
@@ -44,6 +40,11 @@
   margin-top: 60px;
   display: flex;
   justify-content: center;
+}
+
+/* lk */
+.cardd {
+  overflow: hidden;
 }
 
 .pagination li {
@@ -62,3 +63,67 @@
   font-weight: 600;
 }
 
+/* PAGINATION */
+.page-item a {
+  background-color: black !important;
+  color: orange !important;
+  border: none;
+}
+
+.page-item.active .page-link {
+  border: 1px solid orange;
+}
+
+/* CAROUSEL */
+.carousel-page {
+  position: relative;
+}
+
+.carousel-item {
+  position: relative;
+  width: 100vw !important;
+  height: calc(100vh - 71px) !important;
+  overflow: hidden !important;
+}
+.carousel-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100%;
+  width: auto;
+}
+/*height: 70% !important;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+}
+
+/* MODAL */
+.youtube-modal {
+  z-index: 100;
+  /* width: 850px;
+  height: 650px */
+}
+
+.youtube-video {
+  width: 800px;
+  height: 600px;
+}
+
+.card-body {
+  padding: 0 !important;
+}
+
+@media only screen and (max-width: 500px) {
+  .youtube-modal {
+    width: 350px;
+    height: 250px;
+  }
+
+  .youtube-video {
+    width: 300px;
+    height: 200px;
+  }
+}

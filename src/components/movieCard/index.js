@@ -2,15 +2,15 @@ import React from "react";
 import { Card, Button, Badge } from "react-bootstrap";
 import Modal from "react-modal";
 
-const MovieCard = ({ movie, genres }) => {
+const MovieCard = ({ movie, genres, openModal}) => {
   if(!genres || genres.length < 1) {
     return (
       <div>Loading...</div>
     )
   }
   return (
-    <div>
-      <Card className="card" style={{ width: "18rem", height: "400px" }}>
+
+      <Card className="cardd" style={{ width: "18rem", height: "400px" }}>
         <Card.Img className="card-image" 
           variant="top"
           src={`https://image.tmdb.org/t/p/w600_and_h900_bestv2${movie.poster_path}`}
@@ -43,13 +43,13 @@ const MovieCard = ({ movie, genres }) => {
                 <div id="overview-text">{movie.overview}</div>
               </Card.Text>
               <Button variant="success" className="mb-2 mr-2"><a style={{ textDecoration: "none", color: "white" }} href={`https://www.themoviedb.org/movie/${movie.id}?language=en-US`}>See More</a></Button>
-              <Button variant="primary" className="mb-2">Trailer</Button>
+              <Button onClick={() => openModal(movie.id)} variant="primary" className="mb-2">Trailer</Button>
 
             </div>
           </Card.ImgOverlay>
         </Card.Body>
       </Card>
-    </div>
+ 
   );
 };
 

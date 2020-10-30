@@ -24,7 +24,7 @@ const Navigation = ({
   let keyword = "";
   return (
     <div>
-      <Navbar expand="lg" className="navbar-movie" variant="dark">
+      <Navbar expand="md" className="navbar-movie" variant="dark">
         <Navbar.Brand style={{color: "#f4c50b", fontWeight: 600, fontSize: "30px", letterSpacing: "1px"}} href="#home" onClick={() => getMovieLatest()} >MovieBox</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -118,7 +118,7 @@ const Navigation = ({
           >
             <FormControl
               type="text"
-              placeholder="Search"
+              placeholder="Search a movie"
               className="mr-sm-2"
               onChange={(event) => {
                 keyword = event.target.value;

@@ -3,18 +3,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Carousel } from "react-bootstrap";
 
 function MovieCarousel({ list }) {
-  
-
   if (!(list.length > 0)) {
     return <div>Loading</div>;
   }
 
   return (
-    <div className="row carousel-page" style={{ color: "yellow"}}>
+    <div className="row carousel-page" style={{ color: "yellow" }}>
       <Carousel>
         <Carousel.Item>
           <img
-            className="d-block w-100"
+            className="carousel-img "
             src={`https://image.tmdb.org/t/p/original/${list[0].backdrop_path}`}
             alt="First slide"
           />
@@ -26,7 +24,7 @@ function MovieCarousel({ list }) {
 
         <Carousel.Item>
           <img
-            className="d-block w-100"
+            className="carousel-img "
             src={`https://image.tmdb.org/t/p/original/${list[1].backdrop_path}`}
             alt="Second slide"
           />
@@ -38,7 +36,7 @@ function MovieCarousel({ list }) {
 
         <Carousel.Item>
           <img
-            className="d-block w-100"
+            className="carousel-img"
             src={`https://image.tmdb.org/t/p/original/${list[2].backdrop_path}`}
             alt="Third slide"
           />
