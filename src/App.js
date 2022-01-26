@@ -262,9 +262,8 @@ function App() {
       </ReactModal>
 
       <MovieList list={movieList} genres={genres} openModal={openModal} />
-      <div className="footer">
-        MovieBox - 2020
-      </div>
+
+      <div className="footer">MovieBox - 2020</div>
     </div>
   );
 }

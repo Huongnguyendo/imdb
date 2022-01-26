@@ -10,7 +10,6 @@ import {
 } from "react-bootstrap";
 import InputRange from "react-input-range";
 
-
 const Navigation = ({
   getMovieLatest,
   searchByKeyword,
@@ -25,14 +24,25 @@ const Navigation = ({
   return (
     <div>
       <Navbar expand="md" className="navbar-movie" variant="dark">
-        <Navbar.Brand style={{color: "#f4c50b", fontWeight: 600, fontSize: "30px", letterSpacing: "1px"}} href="#home" onClick={() => getMovieLatest()} >MovieBox</Navbar.Brand>
+        <Navbar.Brand
+          style={{
+            color: "#f4c50b",
+            fontWeight: 600,
+            fontSize: "30px",
+            letterSpacing: "1px",
+          }}
+          href="#home"
+          onClick={() => getMovieLatest()}
+        >
+          MovieBox
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="#features" onClick={() => searchByTopRated()}>
               Top rated
             </Nav.Link>
-            
+
             <NavDropdown
               className="d-flex flex-row-reverse"
               title="Sort By"
@@ -45,8 +55,8 @@ const Navigation = ({
                 Popularity (high to low)
               </NavDropdown.Item>
             </NavDropdown>
-            
-            <NavDropdown
+
+            {/* <NavDropdown
               className="d-flex flex-row-reverse filter-dropdown"
               title="Filter By"
               id="collasible-nav-dropdown"
@@ -63,7 +73,7 @@ const Navigation = ({
                 />
               </div>
               </NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
 
             <NavDropdown
               className="d-flex flex-row-reverse"
@@ -105,9 +115,7 @@ const Navigation = ({
               <NavDropdown.Item onClick={() => getMoviesByGenre("878")}>
                 Science Fiction
               </NavDropdown.Item>
-              
             </NavDropdown>
-
           </Nav>
           <Form
             inline

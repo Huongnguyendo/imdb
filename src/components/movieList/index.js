@@ -7,11 +7,11 @@ const MovieList = (props) => {
   console.log("list from app: ", list);
   return (
     // map func is in MovieList Component, send each Card info to MovieCard component
-      <div className="row d-flex movie-row">
-        {list.map((item) => {
-          return <MovieCard movie={item} genres={genres} openModal={openModal}/>;
-        })}
-      </div>
+    <div className="row d-flex movie-row">
+      {list.map((item) => {
+        return <MovieCard movie={item} genres={genres} openModal={openModal} />;
+      })}
+    </div>
   );
 };
 
