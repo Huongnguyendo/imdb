@@ -39,7 +39,10 @@ const Navigation = ({
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="#features" onClick={() => searchByTopRated()}>
+            <Nav.Link
+              className="d-flex flex-row-reverse"
+              onClick={() => searchByTopRated()}
+            >
               Top rated
             </Nav.Link>
 
@@ -127,7 +130,7 @@ const Navigation = ({
             <FormControl
               type="text"
               placeholder="Search a movie"
-              className="mr-sm-2"
+              className="mr-sm-2 movie-search"
               onChange={(event) => {
                 keyword = event.target.value;
                 console.log("keyword", keyword);

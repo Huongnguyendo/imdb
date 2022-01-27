@@ -16,7 +16,7 @@ const MovieCard = ({ movie, genres, openModal }) => {
         <Card.ImgOverlay>
           <div className="card-content">
             <Card.Title className="mb-2">
-              <h1 class="item-title">{movie.title}</h1>
+              <h1 className="item-title">{movie.title}</h1>
             </Card.Title>
             <Card.Text className="mb-2">
               {movie.genre_ids.map((id) => {
@@ -31,18 +31,16 @@ const MovieCard = ({ movie, genres, openModal }) => {
             <Card.Text>Rating: {movie.vote_average}</Card.Text>
             <Card.Text>Release Date: {movie.release_date}</Card.Text>
 
-            <Card.Text>
-              <div class="overview-text">
-                {movie.overview.length > 100
-                  ? movie.overview.slice(0, 100) + "... "
-                  : movie.overview}
-                <a
-                  style={{ color: "orange" }}
-                  href={`https://www.themoviedb.org/movie/${movie.id}?language=en-US`}
-                >
-                  See More
-                </a>
-              </div>
+            <Card.Text className="overview-text">
+              {movie.overview.length > 100
+                ? movie.overview.slice(0, 100) + "... "
+                : movie.overview}
+              <a
+                style={{ color: "orange" }}
+                href={`https://www.themoviedb.org/movie/${movie.id}?language=en-US`}
+              >
+                See More
+              </a>
             </Card.Text>
             <Button
               onClick={() => openModal(movie.id)}
